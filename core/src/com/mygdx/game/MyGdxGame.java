@@ -17,11 +17,12 @@ public class MyGdxGame extends ApplicationAdapter {
     float x, y, xv, yv, a;
     Animation walk;
     boolean canRun = true;
+    private String message = "Touch something already!";
 
-    static final int WIDTH = 18; //two constants to represent the sprite in the game
+    static final int WIDTH = 26 ; //two constants to represent the sprite in the game
     static final int HEIGHT = 26; //split texture by 18 and 26 chunks;
-    static final int DRAW_WIDTH = WIDTH * 3;
-    static final int DRAW_HEIGHT = HEIGHT * 3;
+    static final int DRAW_WIDTH = WIDTH * 2;
+    static final int DRAW_HEIGHT = HEIGHT * 2;
     static final float MAX_VELOCITY = 200; //movement
 
     @Override
@@ -42,11 +43,8 @@ public class MyGdxGame extends ApplicationAdapter {
         time += Gdx.graphics.getDeltaTime(); //time spent between render call // pass in anmination to get key frame
         move();
 
-        if (xv != 0) {
-            currentStance = (TextureRegion) walk.getKeyFrame(time, true);
-        }
-       // screen();
-        Gdx.gl.glClearColor(0.5f, 0.5f, 1, 1);
+        // screen();
+        Gdx.gl.glClearColor(0, 0.5f, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.draw(currentStance, x, y, DRAW_WIDTH, DRAW_HEIGHT);
@@ -59,9 +57,9 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     float decelerate(float velocity) {
-        float deceleration = .00002f; // the closer to 1, the slower the deceleration
+        float deceleration = .001f; // the closer to 1, the slower the deceleration
         velocity *= deceleration;
-        if (Math.abs(velocity) < .05) {
+        if (Math.abs(velocity) < .005) {
             velocity = 0;
         }
         return velocity;
@@ -97,20 +95,21 @@ public class MyGdxGame extends ApplicationAdapter {
             canRun = true;
         }
 
-        y += a * yv * Gdx.graphics.getDeltaTime();//calculates new positions x and y for velocities and time
+        if (x < -DRAW_WIDTH) {
+            x = Gdx.graphics.getWidth();
+        }
+        if (x > Gdx.graphics.getWidth()) {
+            x = -DRAW_WIDTH;
+        }
 
+        y += a * yv * Gdx.graphics.getDeltaTime();//calculates new positions x and y for velocities and time
         x += a * xv * Gdx.graphics.getDeltaTime();
 
+        //if (Gdx.input.isKeyPressed())
         yv = decelerate(yv);
         xv = decelerate(xv);
     }
 }
-        //if hes below or at x and y
-        //set him to y = 0
-//        public void screen
-//        if (x > 650) { y = -40 }
-//        if                y
-//        if                x
-////      if                x
+
 ////
 //    }
